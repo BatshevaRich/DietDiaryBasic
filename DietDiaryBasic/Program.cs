@@ -56,12 +56,25 @@ namespace DietDiaryBasic
                 
             }
             Console.WriteLine();
-            foreach (var concept in z.Get().Data)
+            //foreach (var concept in z.Get().Data)
+            //{
+            //    //results.Add(concept.Name + ": " + concept.Value);
+            //    Console.WriteLine($"{concept.Name}: {concept.Value}");
+
+            //}
+
+            var min = client.Predict<Concept>(
+                    client.PublicModels.GeneralModel.ModelID,
+                    new ClarifaiURLImage("https://www.kingarthurflour.com/sites/default/files/recipe_legacy/1496-3-large.jpg"),
+                    minValue: 0.99M, maxConcepts: 5)
+                .ExecuteAsync().Result;
+            foreach (var concept in min.Get().Data)
             {
                 //results.Add(concept.Name + ": " + concept.Value);
                 Console.WriteLine($"{concept.Name}: {concept.Value}");
 
             }
+
             Console.ReadLine();
         }
     }
